@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import { ActivityCard } from "@/components/dashboard/ActivityCard";
+import { ExportButton } from "@/components/dashboard/ExportButton";
 import { NewestUsers } from "@/components/dashboard/NewestUsers";
 import { RegionsCard } from "@/components/dashboard/RegionsCard";
 import { RevenueChart } from "@/components/dashboard/RevenueChart";
@@ -17,7 +18,7 @@ const stagger = (i: number) => ({ "--i": i }) as CSSProperties;
 export default function OverviewPage() {
   return (
     <>
-      <PageHeader eyebrow={today} title="Overview" description="Revenue and subscriber health across all workspaces." />
+      <PageHeader eyebrow={today} title="Overview" description="Revenue and subscriber health across all workspaces." actions={<ExportButton />} />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {STATS.map((s, i) => (
