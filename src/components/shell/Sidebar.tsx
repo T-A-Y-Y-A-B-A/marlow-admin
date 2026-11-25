@@ -13,7 +13,7 @@ const NAV: { href: string; label: string; icon: IconName }[] = [
   { href: "/settings", label: "Settings", icon: "settings" },
 ];
 
-export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
+export function Sidebar({ onNavigate, onSearch }: { onNavigate?: () => void; onSearch?: () => void }) {
   const pathname = usePathname();
   const { profile } = useSettings();
 
@@ -24,6 +24,16 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         <span className="font-display text-[19px] font-semibold tracking-tight">Marlow</span>
         <span className="ml-auto rounded-md border border-line px-1.5 py-px font-mono text-[10px] uppercase tracking-wider text-ink-3">Admin</span>
       </Link>
+
+      <button
+        type="button"
+        onClick={onSearch}
+        className="mt-6 flex h-9 items-center gap-2 rounded-lg border border-line bg-panel px-2.5 text-[13px] text-ink-3 transition-colors hover:text-ink-2"
+      >
+        <Icon name="search" className="size-3.5" />
+        Search
+        <kbd className="ml-auto font-mono text-[10px]">⌘K</kbd>
+      </button>
 
       <nav aria-label="Main" className="mt-7">
         <p className="px-2 pb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-3">Workspace</p>

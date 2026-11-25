@@ -256,3 +256,31 @@ export const ACTIVITY: { who: string; what: string; when: string; tone: Activity
   { who: "Tidewater", what: "moved from Business to Pro", when: "Yesterday", tone: "warn" },
   { who: "Ruth Abebe", what: "started a 14-day trial", when: "Yesterday", tone: "neutral" },
 ];
+
+/* ------------------------- Revenue by region × month ------------------------ */
+
+// Monthly drift in each region's share: Asia Pacific is growing fastest, North America slowly giving up share.
+const SHARE_DRIFT: Record<string, number> = {
+  "North America": -0.0045,
+  Europe: -0.0015,
+  "Asia Pacific": 0.0045,
+  "Latin America": 0.001,
+  "Middle East & Africa": 0.0005,
+};
+
+/** Last 12 months of revenue split by region. Each month's regions sum to that month's total. */
+export const REGION_REVENUE = (() => {
+  const rand = prng(99);
+  const months = revenueRange("12M").points;
+  const total = REGIONS.reduce((s, r) => s + r.subscribers, 0);
+  const weights = months.map((_, i) =>
+    REGIONS.map((r) => Math.max(0.01, r.subscribers / total + (SHARE_DRIFT[r.name] ?? 0) * (i - 11)) * (0.95 + rand() * 0.1)),
+  );
+  return {
+    months: months.map((m) => ({ label: m.label, full: m.full })),
+    regions: REGIONS.map((r, ri) => {
+      const values = months.map((m, i) => Math.round((m.value * weights[i][ri]) / weights[i].reduce((a, b) => a + b, 0)));
+      return { name: r.name, values, total: values.reduce((a, b) => a + b, 0) };
+    }),
+  };
+})();
