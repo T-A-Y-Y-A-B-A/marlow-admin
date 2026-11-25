@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
+import { ActivityCard } from "@/components/dashboard/ActivityCard";
+import { NewestUsers } from "@/components/dashboard/NewestUsers";
+import { RegionsCard } from "@/components/dashboard/RegionsCard";
 import { RevenueChart } from "@/components/dashboard/RevenueChart";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { PageHeader } from "@/components/ui/Card";
@@ -23,8 +26,22 @@ export default function OverviewPage() {
         ))}
       </div>
 
-      <div className="enter mt-4" style={stagger(6)}>
-        <RevenueChart />
+      <div className="mt-4 grid gap-4 xl:grid-cols-3">
+        <div className="enter min-w-0 xl:col-span-2" style={stagger(6)}>
+          <RevenueChart className="h-full" />
+        </div>
+        <div className="enter min-w-0" style={stagger(7)}>
+          <ActivityCard className="h-full" />
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-4 xl:grid-cols-3">
+        <div className="enter min-w-0 xl:col-span-2" style={stagger(8)}>
+          <RegionsCard className="h-full" />
+        </div>
+        <div className="enter min-w-0" style={stagger(9)}>
+          <NewestUsers className="h-full" />
+        </div>
       </div>
     </>
   );
