@@ -10,6 +10,7 @@ import { inputClass, Select } from "@/components/ui/Field";
 import { Icon } from "@/components/ui/Icon";
 import { useToast } from "@/components/ui/Toast";
 import { ApiError, usersApi } from "@/lib/api";
+import { onCommand } from "@/lib/commands";
 import { cx } from "@/lib/cx";
 import { fullDate, timeAgo } from "@/lib/format";
 import {
@@ -72,6 +73,19 @@ export function UsersView() {
       live = false;
     };
   }, []);
+
+  // Requests from the ⌘K command bar.
+  useEffect(
+    () =>
+      onCommand((c) => {
+        if (c.type === "new-user") setEditing("new");
+        if (c.type === "search-users") {
+          setQuery({ ...DEFAULT_QUERY, q: c.q });
+          setPage(1);
+        }
+      }),
+    [],
+  );
 
   // "/" jumps to search, like most admin tools.
   useEffect(() => {
