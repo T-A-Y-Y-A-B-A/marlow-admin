@@ -4,11 +4,13 @@ import { useState, type FormEvent, type KeyboardEvent, type ReactNode } from "re
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/Card";
+import { Dialog } from "@/components/ui/Dialog";
 import { Field, inputClass, Select, Switch } from "@/components/ui/Field";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { useToast } from "@/components/ui/Toast";
+import { usersApi } from "@/lib/api";
 import { cx } from "@/lib/cx";
-import { updateSettings, useSettings, type Profile, type Settings, type Theme } from "@/lib/settings";
+import { resetSettings, updateSettings, useSettings, type Profile, type Settings, type Theme } from "@/lib/settings";
 
 const TABS = [
   { id: "profile", label: "Profile" },
@@ -148,6 +150,9 @@ const THEMES: { value: Theme; label: string; icon: IconName }[] = [
 ];
 
 function Preferences({ settings }: { settings: Settings }) {
+  const toast = useToast();
+  const [confirmReset, setConfirmReset] = useState(false);
+
   return (
     <>
       <Section title="Appearance" description="System follows your device’s light or dark setting.">
@@ -191,6 +196,32 @@ function Preferences({ settings }: { settings: Settings }) {
           <Switch label="Reduce motion" checked={settings.reduceMotion} onChange={(v) => updateSettings({ reduceMotion: v })} />
         </label>
       </Section>
+
+      <Section title="Sample data" description="Put users and settings back to how they were on first load.">
+        <Button onClick={() => setConfirmReset(true)}>Reset sample data</Button>
+      </Section>
+
+      <Dialog
+        open={confirmReset}
+        onClose={() => setConfirmReset(false)}
+        title="Reset sample data?"
+        description="Added, edited and deleted users are restored to the original list, and your profile and preferences go back to defaults."
+      >
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <Button onClick={() => setConfirmReset(false)}>Cancel</Button>
+          <Button
+            variant="danger"
+            onClick={() => {
+              usersApi.reset();
+              resetSettings();
+              setConfirmReset(false);
+              toast("Sample data restored.");
+            }}
+          >
+            Reset
+          </Button>
+        </div>
+      </Dialog>
     </>
   );
 }
