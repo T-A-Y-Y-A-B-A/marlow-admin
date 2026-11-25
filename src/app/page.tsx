@@ -1,8 +1,5 @@
-export default function Home() {
-  return (
-    <main style={{ padding: 32, fontFamily: "system-ui, sans-serif" }}>
-      <h1>Marlow Admin</h1>
-      <p>Dashboard coming soon.</p>
-    </main>
-  );
+import { PageHeader } from "@/components/ui/Card";
+
+export default function OverviewPage() {
+  return <PageHeader eyebrow="Workspace" title="Overview" description="Revenue and subscriber health across all workspaces." />;
 }
